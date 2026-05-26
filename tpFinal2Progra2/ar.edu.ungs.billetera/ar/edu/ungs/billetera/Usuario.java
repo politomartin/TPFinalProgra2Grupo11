@@ -36,8 +36,7 @@ class Usuario {
     
     
 
-    public void crearCuentaEmpresa(boolean autorizado,
-                             String cuitEmpresa, String alias) {
+    public void crearCuentaEmpresa(boolean autorizado,String cuitEmpresa, String alias) {
 
         Cuenta cuenta = new CuentaEmpresa(0, dni, autorizado, cuitEmpresa, alias);
         cuentas.add(cuenta);

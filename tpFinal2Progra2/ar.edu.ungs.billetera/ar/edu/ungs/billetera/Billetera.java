@@ -3,6 +3,7 @@ package ar.edu.ungs.billetera;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 public class Billetera implements IBilletera {
 	
@@ -67,8 +68,19 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public String crearCuentaPremium(String dniUsuario, String alias, double depositoInicial) {
-		// TODO Auto-generated method stub
-		return null;
+		if (depositoInicial < 500000) {
+			throw new IllegalArgumentException("El depósito inicial debe ser de al menos $500.000");
+		}
+
+		 Usuario usuario = usuarios.get(dniUsuario);
+
+		 Cuenta cuenta = new CuentaPremium(depositoInicial, dniUsuario, alias);
+		 
+		 usuario.agregarCuenta(cuenta);
+		 
+		 aliasCvu.put(alias, cuenta.getCvu());
+
+		return cuenta.getCvu();
 	}
 
 	@Override
@@ -79,8 +91,15 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public List<String> obtenerCuentas(String dniUsuario) {
-		// TODO Auto-generated method stub
-		return null;
+		Usuario usuario = usuarios.get(dniUsuario);
+
+    	List<String> resultado = new ArrayList<>();
+
+		for (Cuenta cuenta : usuario.getCuentas()) {
+			resultado.add(cuenta.toString());
+		}
+
+    	return resultado;
 	}
 
 	@Override
