@@ -41,6 +41,7 @@ public class Billetera implements IBilletera {
 	@Override
 	public void agregarPersonaAutorizada(String cuitEmpresa, String dniAutorizado) {
 		Empresa empresa = empresas.get(cuitEmpresa);
+		
 
 	}
 
