@@ -23,9 +23,9 @@ class Usuario {
         this.cuentas = new ArrayList<>();
     }
 
-    public void crearCuenta(double saldoTotal,  String alias) {
+    public void crearCuentaRegular(double saldoTotal,  String alias) {
 
-        Cuenta cuenta = new CuentaRegular(saldoTotal, dni, alias );
+        Cuenta cuenta = new CuentaRegular(dni, alias );
         cuentas.add(cuenta);
     }
     
@@ -43,9 +43,10 @@ class Usuario {
         cuentas.add(cuenta);
     }
     
+    public void agregarCuenta(
+            Cuenta cuenta) {
 
-    public List<Cuenta> mostrarCuentas() {
-        return cuentas;
+        cuentas.add(cuenta);
     }
 
     public String getDni() {

@@ -6,12 +6,16 @@ import java.util.Map;
 
 public class Billetera implements IBilletera {
 	
-	private Map<String, Usuario> usuarios;
-	 private HashMap<Integer, Actividad> actividades;
+	private HashMap<String, Usuario> usuarios;
+	private HashMap<Integer, Actividad> actividades;
+	private HashMap<String, Empresa> empresas;
+	private HashMap<String, String> aliasCvu;
 	
 	public Billetera() {
 		usuarios = new HashMap<>();
 		actividades= new HashMap<>();
+		empresas = new HashMap<>();
+		aliasCvu = new HashMap<>();
 	}
 	
 	
@@ -22,34 +26,42 @@ public class Billetera implements IBilletera {
 	}
 
 
-	public Map<String, Usuario> getUsuarios() {
-		return usuarios;
-	}
 
 
 	@Override
 	public void registrarEmpresa(String cuit, String nombreFantasia, String telefono, String email,
 			String nombreContacto) {
+		Empresa empresa = new Empresa(cuit, nombreFantasia, telefono, email, nombreContacto);
+		
+		empresas.put(cuit, empresa);
 		
 
 	}
 
 	@Override
 	public void agregarPersonaAutorizada(String cuitEmpresa, String dniAutorizado) {
-		// TODO Auto-generated method stub
+		Empresa empresa = empresas.get(cuitEmpresa);
 
 	}
 
 	@Override
 	public void registrarUsuario(String dni, String nombre, String telefono, String email) {
-		// TODO Auto-generated method stub
-
+		Usuario usuario = new Usuario(dni, nombre, telefono, email);
+		usuarios.put(dni, usuario);
 	}
 
 	@Override
 	public String crearCuentaRegular(String dniUsuario, String alias) {
-		// TODO Auto-generated method stub
-		return null;
+		Usuario usuario = usuarios.get(dniUsuario);
+		
+		Cuenta cuenta = new CuentaRegular(dniUsuario, alias);
+		
+		usuario.agregarCuenta(cuenta);
+		
+		aliasCvu.put(alias, cuenta.getCvu());
+
+		return cuenta.getCvu();
+		
 	}
 
 	@Override

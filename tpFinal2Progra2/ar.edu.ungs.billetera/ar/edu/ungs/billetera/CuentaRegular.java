@@ -2,8 +2,8 @@ package ar.edu.ungs.billetera;
 
 public class CuentaRegular extends Cuenta {
 
-    public CuentaRegular(double saldoTotal, String dniUsuario, String alias) {
-        super(saldoTotal, dniUsuario, alias);
+    public CuentaRegular(String dniUsuario, String alias) {
+        super(0, dniUsuario, alias);
     }
 
     @Override
