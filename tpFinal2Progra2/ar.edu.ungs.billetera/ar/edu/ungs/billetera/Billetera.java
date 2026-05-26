@@ -42,7 +42,7 @@ public class Billetera implements IBilletera {
 	public void agregarPersonaAutorizada(String cuitEmpresa, String dniAutorizado) {
 		Empresa empresa = empresas.get(cuitEmpresa);
 		
-
+		empresa.agregarPersonaAutorizada(dniAutorizado);
 	}
 
 	@Override
@@ -122,8 +122,11 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public String consultarCvu(String alias) {
-		// TODO Auto-generated method stub
-		return null;
+		if (!aliasCvu.containsKey(alias)) {
+			throw new IllegalArgumentException("El alias no existe, ingrese un alias existente");
+		    }
+
+		    return aliasCvu.get(alias);
 	}
 
 	@Override
