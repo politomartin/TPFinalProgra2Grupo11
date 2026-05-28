@@ -73,11 +73,8 @@ public class Billetera implements IBilletera {
 		}
 
 		 Usuario usuario = usuarios.get(dniUsuario);
-
 		 Cuenta cuenta = new CuentaPremium(depositoInicial, dniUsuario, alias);
-		 
-		 usuario.agregarCuenta(cuenta);
-		 
+		 usuario.agregarCuenta(cuenta); 
 		 aliasCvu.put(alias, cuenta.getCvu());
 
 		return cuenta.getCvu();
@@ -85,8 +82,23 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public String crearCuentaCorporativa(String dniUsuario, String alias, String cuitEmpresa) {
-		// TODO Auto-generated method stub
-		return null;
+
+		Empresa empresa = empresas.get(cuitEmpresa);
+
+    if (empresa == null) {
+        throw new IllegalArgumentException("La empresa no existe");
+    }
+
+    if (!empresa.estaAutorizado(dniUsuario)) {
+        throw new IllegalArgumentException("El usuario no está autorizado para operar con esta empresa");
+    }
+
+		Usuario usuario = usuarios.get(dniUsuario);
+		Cuenta cuenta = new CuentaEmpresa(0, dniUsuario, true, cuitEmpresa, alias);
+		usuario.agregarCuenta(cuenta);
+		aliasCvu.put(alias, cuenta.getCvu());
+
+		return cuenta.getCvu();
 	}
 
 	@Override

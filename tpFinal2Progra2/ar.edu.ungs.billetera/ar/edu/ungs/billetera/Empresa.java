@@ -33,6 +33,10 @@ public class Empresa {
     	usuariosAutorizados.add(DNIAutorizado);
     }
 
+    public boolean estaAutorizado(String dniUsuario) {
+        return usuariosAutorizados.contains(dniUsuario);
+    }
+
     public String getCuit() {
         return cuit;
     }
