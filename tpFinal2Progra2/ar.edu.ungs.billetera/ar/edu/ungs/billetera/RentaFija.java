@@ -26,8 +26,10 @@ public class RentaFija extends Inversion {
     }
 
 	@Override
-	public String toString() {
+	protected String getDescripcion() {
 		// TODO Auto-generated method stub
-		return null;
+		return "Renta Fija";
 	}
+
+
 }

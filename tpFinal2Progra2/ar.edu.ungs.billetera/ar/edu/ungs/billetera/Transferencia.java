@@ -29,7 +29,17 @@ public class Transferencia extends Actividad {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+
+	    String estado;
+
+	    if (aprobada) {
+	        estado = "Aprobado";
+	    } else {
+	        estado = "Rechazado";
+	    }
+	    return "fecha: " + fecha+ "\norigen: "+ dniUsuario+ " ("+ cvuCuentaOrigen+ ")"+ 
+	    "\ndestino: "+ dniDestino+ " ("+ cvuCuentaDestino+ ")" + 
+	    "\nmonto: "+ monto+ 
+	    "\n"+ estado;
 	}
 }

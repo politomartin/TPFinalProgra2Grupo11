@@ -24,19 +24,18 @@ public class VinculadaADivisa extends Inversion {
     
     
     public void precancelar() {
-
         if (!preCancelable) {
-
             throw new RuntimeException(
                     "No es precancelable");
         }
     }
 
 	@Override
-	public String toString() {
+	protected String getDescripcion() {
 		// TODO Auto-generated method stub
-		return null;
+		return "Vinculada a Divisa";
 	}
+
 
 
 }

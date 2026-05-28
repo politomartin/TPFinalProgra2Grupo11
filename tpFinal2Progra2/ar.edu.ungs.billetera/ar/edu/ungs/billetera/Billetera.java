@@ -85,8 +85,26 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public String crearCuentaCorporativa(String dniUsuario, String alias, String cuitEmpresa) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Empresa empresa = empresas.get(cuitEmpresa);
+
+	    if (empresa == null) {
+	        throw new IllegalArgumentException("La empresa no existe");
+	    }
+
+	    if (!empresa.estaAutorizado(dniUsuario)) {
+	        throw new IllegalArgumentException("El usuario no está autorizado para operar con esta empresa");
+	    }
+
+			Usuario usuario = usuarios.get(dniUsuario);
+			
+			Cuenta cuenta = new CuentaEmpresa(0, dniUsuario, true, cuitEmpresa, alias);
+			
+			usuario.agregarCuenta(cuenta);
+			
+			aliasCvu.put(alias, cuenta.getCvu());
+
+			return cuenta.getCvu();
 	}
 
 	@Override
@@ -148,8 +166,14 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public List<String> consultarHistorialGlobal() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		   ArrayList<String> lista = new ArrayList<>();
+
+	       for (Actividad actividad : actividades.values() ) {
+	        	lista.add(actividad.toString());
+	        }
+	        return lista;
+
 	}
 
 	@Override
@@ -179,12 +203,12 @@ public class Billetera implements IBilletera {
 	private Cuenta devolverCuentaConCVU(String cvu) {		
 		for(Usuario user: usuarios.values()) {
 			for(Cuenta cuenta: user.getCuentas()) {
-				if(cuenta.getCvu()==cvu) {
+				if(cuenta.getCvu().equals(cvu)) {
 					return cuenta;
-				};
-			};
-		};
+				}
+			}
+		}
 		throw new IllegalArgumentException("Este CVU no existe");
-	};
+	}
 
 }

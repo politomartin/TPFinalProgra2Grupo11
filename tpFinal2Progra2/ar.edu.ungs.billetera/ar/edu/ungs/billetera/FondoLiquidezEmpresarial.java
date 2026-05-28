@@ -22,9 +22,9 @@ class FondoLiquidezEmpresarial extends Inversion {
     }
 
 	@Override
-	public String toString() {
+	public String getDescripcion() {
 		// TODO Auto-generated method stub
-		return null;
+		return "FLE";
 	}
 }
 
