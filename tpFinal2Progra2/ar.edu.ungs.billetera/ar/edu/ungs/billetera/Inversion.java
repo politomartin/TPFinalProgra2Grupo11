@@ -10,7 +10,13 @@ public abstract class Inversion extends Actividad {
 
     
 
-    public Inversion(double monto, String cuentaOrigen, String dniUsuario, int plazo, String tipoDeInversion, boolean aprobada) {
+    public Inversion(double monto, 
+    				String cuentaOrigen, 
+    				String dniUsuario, 
+    				int plazo, 
+    				String tipoDeInversion, 
+    				boolean aprobada) {
+    	
 
         super(monto, cuentaOrigen, dniUsuario, aprobada);
         this.plazo = plazo;
