@@ -11,7 +11,6 @@ class Usuario {
     private String telefono;
     private String email;
     private List<Cuenta> cuentas;
-    private boolean autorizadoCuentasEmpresa;
 
     public Usuario(String dni, String nombre, String telefono, String email) {
 
@@ -19,7 +18,6 @@ class Usuario {
         this.nombre = nombre;
         this.email = email;
         this.telefono = telefono;
-        this.autorizadoCuentasEmpresa = true;
         this.cuentas = new ArrayList<>();
     }
 
@@ -67,12 +65,7 @@ class Usuario {
 	public List<Cuenta> getCuentas() {
 		return cuentas;
 	}
-
-
-	public boolean autorizadoCuentasEmpresa() {
-		return autorizadoCuentasEmpresa;
-	}
-
+	
 	
     
 }

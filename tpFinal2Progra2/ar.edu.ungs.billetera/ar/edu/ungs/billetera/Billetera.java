@@ -102,10 +102,8 @@ public class Billetera implements IBilletera {
     	return resultado;
 	}
 
-	@Override
 	public double obtenerSaldoDisponible(String cvu) {
-		// TODO Auto-generated method stub
-		return 0;
+		return devolverCuentaConCVU(cvu).saldoDisponible;
 	}
 
 	@Override
@@ -177,5 +175,16 @@ public class Billetera implements IBilletera {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	private Cuenta devolverCuentaConCVU(String cvu) {		
+		for(Usuario user: usuarios.values()) {
+			for(Cuenta cuenta: user.getCuentas()) {
+				if(cuenta.getCvu()==cvu) {
+					return cuenta;
+				};
+			};
+		};
+		throw new IllegalArgumentException("Este CVU no existe");
+	};
 
 }
