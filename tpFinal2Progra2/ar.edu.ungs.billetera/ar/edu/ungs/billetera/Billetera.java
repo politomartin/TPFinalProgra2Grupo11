@@ -193,47 +193,46 @@ public class Billetera implements IBilletera {
 		 ArrayList<String> lista = new ArrayList<>();
 
 		for (Actividad actividad : actividades.values() ) {
-			if(actividad.getCvuCuentaOrigen().equals(cvu) || (actividad instanceof Transferencia && ((Transferencia) actividad).getCvuCuentaDestino().equals(cvu))) {
+			if(actividad.getCVU().equals(cvu) || (actividad instanceof Transferencia && ((Transferencia) actividad).getCvuCuentaDestino().equals(cvu))) {
 				lista.add(actividad.toString());
 			}
 		}
 		return lista;
 	}
 
-	@Override
 	public List<String> consultarHistorialUsuario(String dniUsuario) {
-		// TODO Auto-generated method stub
-		return null;
+		 ArrayList<String> lista = new ArrayList<>();
+
+		for (Actividad actividad : actividades.values() ) {
+			if(actividad.getDNI().equals(dniUsuario) || (actividad instanceof Transferencia && ((Transferencia) actividad).getDniDestino().equals(dniUsuario))) {
+				lista.add(actividad.toString());
+			}
+		}
+		return lista;
 	}
 
-	@Override
 	public double obtenerTotalInvertido(String dniUsuario) {
-		// TODO Auto-generated method stub
-		return 0;
+		Usuario usuario = usuarios.get(dniUsuario);
+		
+		return usuario.getTotalInvertido();
 	}
 
-	@Override
 	public List<String> cuentasConMayorVolumen(int cantidadTop) {
-		
-        HashMap<String, Integer> contadorMovimientos = new HashMap<>();
-        
-        for (Actividad actividad : actividades.values()) {
-            String cvu = actividad.getCVU();
-            contadorMovimientos.put(cvu,contadorMovimientos.getOrDefault(cvu, 0) + 1);
-        };
+	    List<Cuenta> cuentas = new ArrayList<>();
+	    
+	    for (Usuario usuario : usuarios.values()) {
+	        cuentas.addAll(usuario.getCuentas());
+	    };
+	    
+	    cuentas.sort((cuenta1, cuenta2)->
+	    	Integer.compare(cuenta2.getCantidadDeMovimientos(),cuenta1.getCantidadDeMovimientos()));
+	    
+	    List<String> top = new ArrayList<>();
+	    for (int i = 0; i < cantidadTop && i < cuentas.size(); i++) {
+	        top.add(cuentas.get(i).toString());
+	    }
 
-        List<Map.Entry<String, Integer>> listaOrdenada = new ArrayList<>(contadorMovimientos.entrySet());
-
-        listaOrdenada.sort((a, b) -> b.getValue().compareTo(a.getValue()));
-
-        List<String> topCuentas = new ArrayList<>();
-
-        for (int i = 0; i < cantidadTop && i < listaOrdenada.size(); i++) {
-
-            topCuentas.add(listaOrdenada.get(i).getKey().toString());
-        }
-
-        return topCuentas;
+	    return top;
     };
 	
 	private Cuenta devolverCuentaConCVU(String cvu) {		

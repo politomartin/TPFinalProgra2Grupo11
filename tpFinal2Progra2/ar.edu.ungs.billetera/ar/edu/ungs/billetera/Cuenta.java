@@ -7,7 +7,8 @@ public abstract class Cuenta {
     protected double saldoDisponible;
     protected double saldoTotal;
     protected String dniUsuario;
-
+    protected int cantidadDeMovimientos;
+    
     public Cuenta(double saldoTotal, String dniUsuario, String alias) {
         this.saldoTotal = saldoTotal;
         this.saldoDisponible = saldoTotal;
@@ -48,6 +49,9 @@ public abstract class Cuenta {
             cuentaOrigen.extraer(monto);
             cuentaDestino.depositar(monto);
             
+            cuentaOrigen.cantidadDeMovimientos+=1;
+            cuentaDestino.cantidadDeMovimientos+=1;
+            
             System.out.println("Transferencia realizada");
             return true;
         } else {
@@ -79,5 +83,9 @@ public abstract class Cuenta {
     }
 
 	protected abstract String getTipoCuenta();
+	
+	public int getCantidadDeMovimientos() {
+		return cantidadDeMovimientos;
+	}
 }
 

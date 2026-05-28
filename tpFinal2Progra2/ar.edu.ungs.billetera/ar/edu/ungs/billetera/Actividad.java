@@ -31,5 +31,9 @@ public abstract class Actividad {
     public String getCVU(){
     	return cvuCuentaOrigen; 	
     };
+    
+    public String getDNI() {
+    	return dniUsuario;
+    }
 
 }

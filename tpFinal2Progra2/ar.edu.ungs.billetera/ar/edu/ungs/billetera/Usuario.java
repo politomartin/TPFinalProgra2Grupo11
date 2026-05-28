@@ -11,6 +11,7 @@ class Usuario {
     private String telefono;
     private String email;
     private List<Cuenta> cuentas;
+    private double totalInvertido;
 
     public Usuario(String dni, String nombre, String telefono, String email) {
 
@@ -66,7 +67,9 @@ class Usuario {
 		return cuentas;
 	}
 	
+	public double getTotalInvertido() {
+		return totalInvertido;
+	}
 	
-    
 }
 
