@@ -70,6 +70,9 @@ class Usuario {
 	public double getTotalInvertido() {
 		return totalInvertido;
 	}
+	  public void sumarInvertido( double monto) {
+	        totalInvertido += monto;
+	    }
 	
 }
 

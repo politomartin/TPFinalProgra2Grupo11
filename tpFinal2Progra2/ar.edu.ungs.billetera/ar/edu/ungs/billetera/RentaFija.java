@@ -2,14 +2,12 @@ package ar.edu.ungs.billetera;
 
 public class RentaFija extends Inversion {
 
-    private double interes;
+    private double interes = 0.20;
 
-    public RentaFija(double monto, String cuentaOrigen, String dniUsuario, int plazo, double interes, boolean aprobada) {
+    public RentaFija(double monto, String cuentaOrigen, String dniUsuario, int plazo, boolean aprobada) {
 
         super(monto, cuentaOrigen, dniUsuario, plazo, "Renta Fija", aprobada);
 
-        this.interes = interes;
-        this.preCancelable = true;
     }
 
     @Override

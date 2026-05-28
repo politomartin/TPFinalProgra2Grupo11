@@ -23,8 +23,7 @@ public class CuentaRegular extends Cuenta {
     public void depositar(double monto) {
     	 if (saldoDisponible + monto > limiteSaldo) {
 
-             throw new IllegalStateException(
-                     "La cuenta regular supera el limite permitido");
+             throw new IllegalStateException("La cuenta regular supera el limite permitido");
          }
 
          saldoDisponible += monto;

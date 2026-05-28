@@ -135,16 +135,44 @@ public class Billetera implements IBilletera {
 		boolean aprobada = cuentaOrigen.transferirDinero(monto, cuentaOrigen, dniOrigen, cuentaDestino);
 
 		int idActividad = actividades.size() + 1;
-		Transferencia transferencia = new Transferencia(
-			monto, cvuOrigen, dniOrigen, cvuDestino, dniDestino, aprobada
+		Transferencia transferencia = new Transferencia(monto, cvuOrigen, dniOrigen, cvuDestino, dniDestino, aprobada
 		);
+		
 		actividades.put(idActividad, transferencia);
 	}
 
 	@Override
 	public int realizarInversionRentaFija(String dni, String cvu, double monto, int plazoDias) {
-		// TODO Auto-generated method stub
-		return 0;
+
+	    Cuenta cuenta = devolverCuentaConCVU(cvu);
+
+	    if (cuenta == null) {
+
+	        throw new IllegalArgumentException("Cuenta inexistente");
+	    }
+
+	    if (!cuenta.devolverDNIUsuario().equals(dni)) {
+
+	        throw new IllegalArgumentException("La cuenta no pertenece al usuario");
+	    }
+
+	    if (!cuenta.puedeTransferir(monto)) {
+
+	        throw new IllegalStateException("Saldo insuficiente");
+	    }
+
+	    cuenta.extraer(monto);
+
+	    RentaFija inversion = new RentaFija(monto, cvu, dni, plazoDias, true);
+
+	    actividades.put(inversion.getIdInversion(),inversion);
+
+	    Usuario usuario = usuarios.get(dni);
+
+	    usuario.sumarInvertido(monto);
+
+	    return inversion.getIdInversion();
+
 	}
 
 	@Override
@@ -156,8 +184,36 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public int realizarInversionLiquidez(String dni, String cvu, double monto, int plazoDias) {
-		// TODO Auto-generated method stub
-		return 0;
+	    Cuenta cuenta = devolverCuentaConCVU(cvu);
+
+	    if (cuenta == null) {
+	        throw new IllegalArgumentException( "Cuenta inexistente");
+	    }
+
+	    if (!(cuenta instanceof CuentaEmpresa)) {
+	        throw new IllegalArgumentException("Solo las cuentas corporativas pueden invertir en liquidez");
+	    }
+
+	    if (monto < 20000000) {
+	        throw new IllegalArgumentException("El monto minimo es 20 millones");
+	    }
+
+	    if (cuenta.mostrarSaldo() < monto) {
+	        throw new IllegalStateException("Saldo insuficiente");
+	    }
+
+	    cuenta.extraer(monto);
+
+
+	    FondoLiquidezEmpresarial inversion = new FondoLiquidezEmpresarial(monto,cvu,dni,plazoDias,true);
+
+	    actividades.put(inversion.getIdInversion(),inversion);
+
+	    Usuario usuario = usuarios.get(dni);
+
+	    usuario.sumarInvertido(monto);
+
+	    return inversion.getIdInversion();
 	}
 
 	@Override
