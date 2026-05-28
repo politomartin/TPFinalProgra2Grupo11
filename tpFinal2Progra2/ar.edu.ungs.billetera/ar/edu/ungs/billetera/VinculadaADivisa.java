@@ -5,7 +5,7 @@ public class VinculadaADivisa extends Inversion {
     private String divisa;
     private double interes;
 
-    public VinculadaADivisa(String id, String fecha, double monto, String cuentaOrigen, String dniUsuario, int plazo, String divisa, double interes, boolean aprobada) {
+    public VinculadaADivisa(double monto, String cuentaOrigen, String dniUsuario, int plazo, String divisa, double interes, boolean aprobada) {
 
         super(monto, cuentaOrigen, dniUsuario, plazo, "Vinculada a Divisa", aprobada);
 

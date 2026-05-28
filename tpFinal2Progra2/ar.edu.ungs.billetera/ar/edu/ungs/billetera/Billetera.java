@@ -56,7 +56,7 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public String crearCuentaRegular(String dniUsuario, String alias) {
-		Usuario usuario = usuarios.get(dniUsuario);
+		Usuario usuario = devolverUsuarioConDNI(dniUsuario);
 		
 		Cuenta cuenta = new CuentaRegular(dniUsuario, alias);
 		
@@ -74,7 +74,7 @@ public class Billetera implements IBilletera {
 			throw new IllegalArgumentException("El depósito inicial debe ser de al menos $500.000");
 		}
 
-		 Usuario usuario = usuarios.get(dniUsuario);
+		 Usuario usuario = devolverUsuarioConDNI(dniUsuario);
 		 Cuenta cuenta = new CuentaPremium(depositoInicial, dniUsuario, alias);
 		 usuario.agregarCuenta(cuenta); 
 		 aliasCvu.put(alias, cuenta.getCvu());
@@ -96,7 +96,7 @@ public class Billetera implements IBilletera {
 	        throw new IllegalArgumentException("El usuario no está autorizado para operar con esta empresa");
 	    }
 
-			Usuario usuario = usuarios.get(dniUsuario);
+			Usuario usuario = devolverUsuarioConDNI(dniUsuario);
 			
 			Cuenta cuenta = new CuentaEmpresa(0, dniUsuario, true, cuitEmpresa, alias);
 			
@@ -111,7 +111,7 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public List<String> obtenerCuentas(String dniUsuario) {
-		Usuario usuario = usuarios.get(dniUsuario);
+		Usuario usuario = devolverUsuarioConDNI(dniUsuario);
 
     	List<String> resultado = new ArrayList<>();
 
@@ -145,15 +145,10 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public int realizarInversionRentaFija(String dni, String cvu, double monto, int plazoDias) {
+		Usuario usuario = devolverUsuarioConDNI(dni);
+		Cuenta cuenta = devolverCuentaConCVU(cvu);
 
-	    Cuenta cuenta = devolverCuentaConCVU(cvu);
-
-	    if (cuenta == null) {
-
-	        throw new IllegalArgumentException("Cuenta inexistente");
-	    }
-
-	    if (!cuenta.devolverDNIUsuario().equals(dni)) {
+		if (!cuenta.devolverDNIUsuario().equals(dni)) {
 
 	        throw new IllegalArgumentException("La cuenta no pertenece al usuario");
 	    }
@@ -163,58 +158,67 @@ public class Billetera implements IBilletera {
 	        throw new IllegalStateException("Saldo insuficiente");
 	    }
 
-	    cuenta.extraer(monto);
+		boolean aprobada = cuenta.invertir(monto);
 
-	    RentaFija inversion = new RentaFija(monto, cvu, dni, plazoDias, true);
+		RentaFija inversion = new RentaFija(monto, cvu, dni, plazoDias, aprobada);
+    	actividades.put(actividades.size() + 1, inversion);
 
-	    actividades.put(inversion.getIdInversion(),inversion);
+		usuario.sumarInvertido(monto);
 
-	    Usuario usuario = usuarios.get(dni);
-
-	    usuario.sumarInvertido(monto);
-
-	    return inversion.getIdInversion();
-
+    	return inversion.getIdInversion();
 	}
 
 	@Override
 	public int realizarInversionDivisa(String dni, String cvu, double monto, int plazoDias, String divisa,
 			double tasa) {
-		// TODO Auto-generated method stub
-		return 0;
+		Usuario usuario = devolverUsuarioConDNI(dni);
+		Cuenta cuenta = devolverCuentaConCVU(cvu);
+
+		if (!cuenta.devolverDNIUsuario().equals(dni)) {
+
+	        throw new IllegalArgumentException("La cuenta no pertenece al usuario");
+	    }
+
+	    if (!cuenta.puedeTransferir(monto)) {
+
+	        throw new IllegalStateException("Saldo insuficiente");
+	    }
+		
+		 boolean aprobada = cuenta.invertir(monto);
+
+		VinculadaADivisa inversion = new VinculadaADivisa(monto, cvu, dni, plazoDias, divisa, tasa, aprobada);
+		actividades.put(actividades.size() + 1, inversion);
+
+		usuario.sumarInvertido(monto);
+
+		return inversion.getIdInversion();
 	}
 
 	@Override
 	public int realizarInversionLiquidez(String dni, String cvu, double monto, int plazoDias) {
-		 Cuenta cuenta = devolverCuentaConCVU(cvu);
+		Usuario usuario = devolverUsuarioConDNI(dni);
+		Cuenta cuenta = devolverCuentaConCVU(cvu);
 
-		    if (cuenta == null) {
-		        throw new IllegalArgumentException( "Cuenta inexistente");
-		    }
+		if (monto < 20000000) {
+		    throw new IllegalArgumentException("El monto minimo es 20 millones");
+		}
 
-		    if (!(cuenta instanceof CuentaEmpresa)) {
-		        throw new IllegalArgumentException("Solo las cuentas corporativas pueden invertir en liquidez");
-		    }
+		if (cuenta.mostrarSaldo() < monto) {
+		    throw new IllegalStateException("Saldo insuficiente");
+		}
 
-		    if (monto < 20000000) {
-		        throw new IllegalArgumentException("El monto minimo es 20 millones");
-		    }
+		if (!(cuenta instanceof CuentaEmpresa)) {
+			throw new IllegalArgumentException("Solo cuentas corporativas pueden invertir en FLE");
+		}
 
-		    if (cuenta.mostrarSaldo() < monto) {
-		        throw new IllegalStateException("Saldo insuficiente");
-		    }
+		boolean aprobada = cuenta.invertir(monto);
 
-		    cuenta.extraer(monto);
+		FondoLiquidezEmpresarial inversion = new FondoLiquidezEmpresarial(monto, cvu, dni, plazoDias, aprobada);
+		actividades.put(actividades.size() + 1, inversion);
 
-		    FondoLiquidezEmpresarial inversion = new FondoLiquidezEmpresarial(monto,cvu,dni,plazoDias,true);
+		usuario.sumarInvertido(monto);
 
-		    actividades.put(inversion.getIdInversion(),inversion);
-
-		    Usuario usuario = usuarios.get(dni);
-
-		    usuario.sumarInvertido(monto);
-
-		    return inversion.getIdInversion();
+		return inversion.getIdInversion();
 	}
 
 	@Override
@@ -312,4 +316,11 @@ public class Billetera implements IBilletera {
 		throw new IllegalArgumentException("No existe ninguna cuenta con CVU: " + cvu);
 	}
 
+	private Usuario devolverUsuarioConDNI(String dni) {
+    Usuario usuario = usuarios.get(dni);
+    if (usuario == null) {
+        throw new IllegalArgumentException("No existe ningún usuario con DNI: " + dni);
+    }
+    return usuario;
+}
 }

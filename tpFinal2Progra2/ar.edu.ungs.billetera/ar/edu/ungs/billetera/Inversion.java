@@ -2,7 +2,7 @@ package ar.edu.ungs.billetera;
 
 public abstract class Inversion extends Actividad {
 	
-	private int contador = 1;
+	private static int contador = 1;
     protected int id;
 	protected int plazo;
     protected String tipoDeInversion;

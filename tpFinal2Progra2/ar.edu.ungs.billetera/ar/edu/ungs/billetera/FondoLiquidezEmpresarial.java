@@ -7,7 +7,7 @@ class FondoLiquidezEmpresarial extends Inversion {
     public FondoLiquidezEmpresarial(double monto, String cuentaOrigen, String dniUsuario, int plazo, boolean aprobada) {
 
         super(monto, cuentaOrigen, dniUsuario, plazo, "FLE ", aprobada);
-        this.inversionFLE = 0.8;
+        this.inversionFLE = 0.08;
     }
 
     

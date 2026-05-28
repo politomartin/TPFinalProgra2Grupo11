@@ -32,13 +32,15 @@ public abstract class Cuenta {
         }
     }
 
-    public void invertir(double monto, Cuenta cuentaOrigen, String dniUsuario, int plazo, String tipoDeInversion) {
+    public boolean invertir(double monto) {
 
         if (puedeInvertir(monto)) {
-            extraer(monto);
+            saldoDisponible -= monto;
             System.out.println("Inversión realizada");
+            return true;
         } else {
             System.out.println("No puede invertir");
+            return false;
         }
     }
 

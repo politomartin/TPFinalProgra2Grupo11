@@ -24,7 +24,7 @@ public class CuentaEmpresa extends Cuenta {
 	@Override
 	public boolean puedeInvertir(double monto) {
 		if(estaAutorizado()) {
-			return saldoDisponible >= monto;
+			return monto >= 20000000 && saldoDisponible >= monto;
 		}
 		return false;
 	}
