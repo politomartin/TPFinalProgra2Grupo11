@@ -204,7 +204,6 @@ public class Billetera implements IBilletera {
 
 	    cuenta.extraer(monto);
 
-
 	    FondoLiquidezEmpresarial inversion = new FondoLiquidezEmpresarial(monto,cvu,dni,plazoDias,true);
 
 	    actividades.put(inversion.getIdInversion(),inversion);
