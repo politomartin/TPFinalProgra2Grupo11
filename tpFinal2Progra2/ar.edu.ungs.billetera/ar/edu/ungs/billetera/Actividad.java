@@ -27,5 +27,9 @@ public abstract class Actividad {
 
     @Override
     public abstract String toString();
+    
+    public String getCVU(){
+    	return cvuCuentaOrigen; 	
+    };
 
 }

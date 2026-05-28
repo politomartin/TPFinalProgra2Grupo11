@@ -196,9 +196,27 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public List<String> cuentasConMayorVolumen(int cantidadTop) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		
+        HashMap<String, Integer> contadorMovimientos = new HashMap<>();
+        
+        for (Actividad actividad : actividades.values()) {
+            String cvu = actividad.getCVU();
+            contadorMovimientos.put(cvu,contadorMovimientos.getOrDefault(cvu, 0) + 1);
+        };
+
+        List<Map.Entry<String, Integer>> listaOrdenada = new ArrayList<>(contadorMovimientos.entrySet());
+
+        listaOrdenada.sort((a, b) -> b.getValue().compareTo(a.getValue()));
+
+        List<String> topCuentas = new ArrayList<>();
+
+        for (int i = 0; i < cantidadTop && i < listaOrdenada.size(); i++) {
+
+            topCuentas.add(listaOrdenada.get(i).getKey().toString());
+        }
+
+        return topCuentas;
+    };
 	
 	private Cuenta devolverCuentaConCVU(String cvu) {		
 		for(Usuario user: usuarios.values()) {
