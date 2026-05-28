@@ -73,11 +73,8 @@ public class Billetera implements IBilletera {
 		}
 
 		 Usuario usuario = usuarios.get(dniUsuario);
-
 		 Cuenta cuenta = new CuentaPremium(depositoInicial, dniUsuario, alias);
-		 
-		 usuario.agregarCuenta(cuenta);
-		 
+		 usuario.agregarCuenta(cuenta); 
 		 aliasCvu.put(alias, cuenta.getCvu());
 
 		return cuenta.getCvu();
@@ -85,6 +82,7 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public String crearCuentaCorporativa(String dniUsuario, String alias, String cuitEmpresa) {
+
 		
 		Empresa empresa = empresas.get(cuitEmpresa);
 
@@ -105,6 +103,8 @@ public class Billetera implements IBilletera {
 			aliasCvu.put(alias, cuenta.getCvu());
 
 			return cuenta.getCvu();
+			
+			
 	}
 
 	@Override
