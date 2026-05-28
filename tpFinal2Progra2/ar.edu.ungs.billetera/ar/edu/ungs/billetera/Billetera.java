@@ -186,35 +186,35 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public int realizarInversionLiquidez(String dni, String cvu, double monto, int plazoDias) {
-	    Cuenta cuenta = devolverCuentaConCVU(cvu);
+		 Cuenta cuenta = devolverCuentaConCVU(cvu);
 
-	    if (cuenta == null) {
-	        throw new IllegalArgumentException( "Cuenta inexistente");
-	    }
+		    if (cuenta == null) {
+		        throw new IllegalArgumentException( "Cuenta inexistente");
+		    }
 
-	    if (!(cuenta instanceof CuentaEmpresa)) {
-	        throw new IllegalArgumentException("Solo las cuentas corporativas pueden invertir en liquidez");
-	    }
+		    if (!(cuenta instanceof CuentaEmpresa)) {
+		        throw new IllegalArgumentException("Solo las cuentas corporativas pueden invertir en liquidez");
+		    }
 
-	    if (monto < 20000000) {
-	        throw new IllegalArgumentException("El monto minimo es 20 millones");
-	    }
+		    if (monto < 20000000) {
+		        throw new IllegalArgumentException("El monto minimo es 20 millones");
+		    }
 
-	    if (cuenta.mostrarSaldo() < monto) {
-	        throw new IllegalStateException("Saldo insuficiente");
-	    }
+		    if (cuenta.mostrarSaldo() < monto) {
+		        throw new IllegalStateException("Saldo insuficiente");
+		    }
 
-	    cuenta.extraer(monto);
+		    cuenta.extraer(monto);
 
-	    FondoLiquidezEmpresarial inversion = new FondoLiquidezEmpresarial(monto,cvu,dni,plazoDias,true);
+		    FondoLiquidezEmpresarial inversion = new FondoLiquidezEmpresarial(monto,cvu,dni,plazoDias,true);
 
-	    actividades.put(inversion.getIdInversion(),inversion);
+		    actividades.put(inversion.getIdInversion(),inversion);
 
-	    Usuario usuario = usuarios.get(dni);
+		    Usuario usuario = usuarios.get(dni);
 
-	    usuario.sumarInvertido(monto);
+		    usuario.sumarInvertido(monto);
 
-	    return inversion.getIdInversion();
+		    return inversion.getIdInversion();
 	}
 
 	@Override
