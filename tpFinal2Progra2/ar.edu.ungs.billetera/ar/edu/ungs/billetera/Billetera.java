@@ -126,8 +126,19 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public void realizarTransferencia(String cvuOrigen, String cvuDestino, double monto) {
-		// TODO Auto-generated method stub
+		Cuenta cuentaOrigen = devolverCuentaConCVU(cvuOrigen);
+		Cuenta cuentaDestino = devolverCuentaConCVU(cvuDestino);
 
+		String dniOrigen = cuentaOrigen.devolverDNIUsuario();
+		String dniDestino = cuentaDestino.devolverDNIUsuario();
+
+		boolean aprobada = cuentaOrigen.transferirDinero(monto, cuentaOrigen, dniOrigen, cuentaDestino);
+
+		int idActividad = actividades.size() + 1;
+		Transferencia transferencia = new Transferencia(
+			monto, cvuOrigen, dniOrigen, cvuDestino, dniDestino, aprobada
+		);
+		actividades.put(idActividad, transferencia);
 	}
 
 	@Override
@@ -178,8 +189,15 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public List<String> consultarHistorialCuenta(String cvu) {
-		// TODO Auto-generated method stub
-		return null;
+
+		 ArrayList<String> lista = new ArrayList<>();
+
+		for (Actividad actividad : actividades.values() ) {
+			if(actividad.getCvuCuentaOrigen().equals(cvu) || (actividad instanceof Transferencia && ((Transferencia) actividad).getCvuCuentaDestino().equals(cvu))) {
+				lista.add(actividad.toString());
+			}
+		}
+		return lista;
 	}
 
 	@Override
@@ -208,7 +226,7 @@ public class Billetera implements IBilletera {
 				}
 			}
 		}
-		throw new IllegalArgumentException("Este CVU no existe");
+		throw new IllegalArgumentException("No existe ninguna cuenta con CVU: " + cvu);
 	}
 
 }

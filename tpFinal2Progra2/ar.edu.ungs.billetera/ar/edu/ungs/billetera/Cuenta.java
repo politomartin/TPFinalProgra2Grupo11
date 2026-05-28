@@ -31,7 +31,7 @@ public abstract class Cuenta {
         }
     }
 
-    public void invertir(double monto, Cuenta cuentaOrigen, int dniUsuario, int plazo, String tipoDeInversion) {
+    public void invertir(double monto, Cuenta cuentaOrigen, String dniUsuario, int plazo, String tipoDeInversion) {
 
         if (puedeInvertir(monto)) {
             extraer(monto);
@@ -41,16 +41,18 @@ public abstract class Cuenta {
         }
     }
 
-    public void transferirDinero(double monto, Cuenta cuentaOrigen, int dniUsuario, Cuenta cuentaDestino) {
+    public boolean transferirDinero(double monto, Cuenta cuentaOrigen, String dniUsuario, Cuenta cuentaDestino) {
 
         if (puedeTransferir(monto)) {
 
             cuentaOrigen.extraer(monto);
             cuentaDestino.depositar(monto);
-
+            
             System.out.println("Transferencia realizada");
+            return true;
         } else {
-            System.out.println("No puede transferir");
+        	System.out.println("No puede transferir");
+            return false;
         }
     }
 
