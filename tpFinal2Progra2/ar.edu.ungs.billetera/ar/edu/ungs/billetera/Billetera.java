@@ -1,8 +1,10 @@
 package ar.edu.ungs.billetera;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ArrayList;
 
 public class Billetera implements IBilletera {
@@ -202,12 +204,21 @@ public class Billetera implements IBilletera {
 
 	public List<String> consultarHistorialUsuario(String dniUsuario) {
 		 ArrayList<String> lista = new ArrayList<>();
-
-		for (Actividad actividad : actividades.values() ) {
-			if(actividad.getDNI().equals(dniUsuario) || (actividad instanceof Transferencia && ((Transferencia) actividad).getDniDestino().equals(dniUsuario))) {
-				lista.add(actividad.toString());
-			}
-		}
+		 
+		 Iterator<Map.Entry<Integer, Actividad>> act = actividades.entrySet().iterator();
+		 
+		 while(act.hasNext()) {
+			 
+			 Map.Entry<Integer, Actividad> actividad = act.next();
+			 
+			 Actividad actActual = actividad.getValue();
+			 
+			 if(actActual.getDNI().equals(dniUsuario) || 
+				(actActual instanceof Transferencia && ((Transferencia) actActual).getDniDestino().equals(dniUsuario))) {
+				 
+					lista.add(actActual.toString());
+				} 
+		 }
 		return lista;
 	}
 
