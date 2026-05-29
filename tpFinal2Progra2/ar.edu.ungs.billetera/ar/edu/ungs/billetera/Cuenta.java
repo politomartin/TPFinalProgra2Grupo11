@@ -36,6 +36,7 @@ public abstract class Cuenta {
 
         if (puedeInvertir(monto)) {
             saldoDisponible -= monto;
+            cantidadDeMovimientos+=1;
             System.out.println("Inversión realizada");
             return true;
         } else {

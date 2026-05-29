@@ -161,11 +161,12 @@ public class Billetera implements IBilletera {
 		boolean aprobada = cuenta.invertir(monto);
 
 		RentaFija inversion = new RentaFija(monto, cvu, dni, plazoDias, aprobada);
-    	actividades.put(actividades.size() + 1, inversion);
+		int id = actividades.size() + 1;
+		actividades.put(id, inversion);
 
 		usuario.sumarInvertido(monto);
 
-    	return inversion.getIdInversion();
+    	return id;
 	}
 
 	@Override
@@ -187,11 +188,14 @@ public class Billetera implements IBilletera {
 		 boolean aprobada = cuenta.invertir(monto);
 
 		VinculadaADivisa inversion = new VinculadaADivisa(monto, cvu, dni, plazoDias, divisa, tasa, aprobada);
-		actividades.put(actividades.size() + 1, inversion);
+		int id = actividades.size() + 1;
+		actividades.put(id, inversion);
+		
+		inversion.cotizacionAlMomentoDeInvertir();
 
 		usuario.sumarInvertido(monto);
 
-		return inversion.getIdInversion();
+		return id;
 	}
 
 	@Override
@@ -214,16 +218,33 @@ public class Billetera implements IBilletera {
 		boolean aprobada = cuenta.invertir(monto);
 
 		FondoLiquidezEmpresarial inversion = new FondoLiquidezEmpresarial(monto, cvu, dni, plazoDias, aprobada);
-		actividades.put(actividades.size() + 1, inversion);
+		int id = actividades.size() + 1;
+		actividades.put(id, inversion);
 
 		usuario.sumarInvertido(monto);
 
-		return inversion.getIdInversion();
+		return id;
 	}
 
 	@Override
 	public void precancelarInversion(String dni, String cvu, int idInversion) {
-		// TODO Auto-generated method stub
+		Actividad actividad = actividades.get(idInversion);
+		
+		if (!(actividad instanceof Inversion)) {
+		    throw new IllegalArgumentException("La actividad no es una inversión");
+		}
+		
+		Inversion inversion = (Inversion) actividad;
+		
+		if(inversion.esPreCancelable()) {
+			double monto = inversion.getMonto();
+			double ganancia = (inversion.sumarGanancia());
+			Cuenta cuenta = devolverCuentaConCVU(cvu);
+			cuenta.depositar(monto+ganancia);
+			actividades.remove(idInversion);
+			Usuario usuario = devolverUsuarioConDNI(dni);
+			usuario.restarInvertido(monto);
+		}
 
 	}
 

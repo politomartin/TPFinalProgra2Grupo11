@@ -14,7 +14,7 @@ public abstract class Actividad {
         this.monto = monto;
         this.cvuCuentaOrigen = cvuCuentaOrigen;
         this.dniUsuario = dniUsuario;
-        this.aprobada = true;
+        this.aprobada = aprobada;
     }
 
     public double mostrarMonto() {

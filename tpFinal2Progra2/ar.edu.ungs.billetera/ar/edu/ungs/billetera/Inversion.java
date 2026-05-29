@@ -1,8 +1,7 @@
 package ar.edu.ungs.billetera;
 
 public abstract class Inversion extends Actividad {
-	
-	private static int contador = 1;
+
     protected int id;
 	protected int plazo;
     protected String tipoDeInversion;
@@ -22,10 +21,9 @@ public abstract class Inversion extends Actividad {
         super(monto, cuentaOrigen, dniUsuario, aprobada);
         this.plazo = plazo;
         this.tipoDeInversion = tipoDeInversion;
-        this.id = contador++;
     }
 
-    public abstract void sumarGanancia();
+    public abstract double sumarGanancia();
 
     public double getGananciasGeneradas() {
         return gananciasGeneradas;
@@ -34,6 +32,8 @@ public abstract class Inversion extends Actividad {
     public int getIdInversion() {
         return id;
     }
+    
+    public abstract double getMonto();
     
     public boolean esPreCancelable() {
         return preCancelable;

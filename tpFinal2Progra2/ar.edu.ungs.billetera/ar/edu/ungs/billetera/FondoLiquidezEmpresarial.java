@@ -12,17 +12,25 @@ class FondoLiquidezEmpresarial extends Inversion {
 
     
     @Override
-    public void sumarGanancia() {
+    public double sumarGanancia() {
 
         double cotizacion = Utilitarios.consultarCotizacion("FLE");
 
         gananciasGeneradas += monto * cotizacion * inversionFLE;
+        
+        return gananciasGeneradas;
     }
 
 	@Override
 	public String getDescripcion() {
 		// TODO Auto-generated method stub
 		return "FLE";
+	}
+
+
+	@Override
+	public double getMonto() {
+		return monto;
 	}
 }
 
