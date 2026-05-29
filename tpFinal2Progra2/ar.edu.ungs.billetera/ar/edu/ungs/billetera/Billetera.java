@@ -343,5 +343,36 @@ public class Billetera implements IBilletera {
         throw new IllegalArgumentException("No existe ningún usuario con DNI: " + dni);
     }
     return usuario;
-}
+};
+
+@Override
+public String toString() {
+	
+	StringBuilder billetera = new StringBuilder();
+	
+	billetera.append("Usuarios con sus correspondientes cuentas:").append("\n\n");
+	
+	for(Usuario usuario: usuarios.values()) {
+		
+		billetera.append("------------------------------------\n");
+		
+		billetera.append(usuario.toString()).append("\n")
+		.append("Estas son sus cuentas:").append("\n");
+		
+		for(Cuenta cuenta: usuario.getCuentas()) {
+			billetera.append(cuenta.toString()).append("\n");
+			
+		};
+		
+		billetera.append("\n");
+		
+	}
+
+		billetera.append("-----------------------------------\n-----------------------------------\n");			
+		billetera.append("Todas las actividades: \n\n").append(consultarHistorialGlobal());
+	
+	
+	return billetera.toString();
+	
+};
 }

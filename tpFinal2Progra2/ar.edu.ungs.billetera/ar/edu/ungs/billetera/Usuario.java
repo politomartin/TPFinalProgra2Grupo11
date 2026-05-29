@@ -77,6 +77,20 @@ class Usuario {
 	 public void restarInvertido(double monto) {
 		 totalInvertido -= monto;
 	 }
+	 
+	@Override
+		
+	public String toString() {
+			
+		StringBuilder usuario = new StringBuilder();
+			
+		usuario.append("DNI: ").append(dni).append("\n")
+		.append("Nombre: ").append(nombre).append("\n")
+		.append("Email: ").append(email).append("\n")
+		.append("Telefono: ").append(telefono);
+			
+		return usuario.toString();
+	};	 
 	
 }
 
