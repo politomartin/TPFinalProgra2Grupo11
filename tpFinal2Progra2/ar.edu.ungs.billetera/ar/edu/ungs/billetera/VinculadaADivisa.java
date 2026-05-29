@@ -21,16 +21,24 @@ public class VinculadaADivisa extends Inversion {
         cotizacion = Utilitarios.consultarCotizacion(divisa);
     }
     
+    @Override
+    public double calcularMontoADevolver() {
+        double cantidadDivisas = monto / cotizacion;
+        long dias = ChronoUnit.DAYS.between(fecha, Utilitarios.hoy());
+        double interesesEnDivisas = cantidadDivisas * (intereses / 365) * dias;
+        interesesEnDivisas /= 2;
+        return (cantidadDivisas + interesesEnDivisas) * Utilitarios.consultarCotizacion(divisa);
+    }
 
     @Override
     public double sumarGanancia() {
     	
     	double cantidadDivisas = monto / cotizacion;
-        long diasTranscurridos =ChronoUnit.DAYS.between( fecha, Utilitarios.hoy());
+        long diasTranscurridos = ChronoUnit.DAYS.between(fecha, Utilitarios.hoy());
         double cotizacionActual = Utilitarios.consultarCotizacion(divisa);
         
-        gananciasGeneradas += ((cantidadDivisas * (intereses / 365) * diasTranscurridos)+
-        		(cantidadDivisas/2)) * cotizacionActual;
+        double interesesEnDivisas = cantidadDivisas * (intereses / 365) * diasTranscurridos;
+        gananciasGeneradas = interesesEnDivisas * cotizacionActual;
         return gananciasGeneradas;
     }
     

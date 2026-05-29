@@ -23,6 +23,10 @@ public abstract class Inversion extends Actividad {
         this.tipoDeInversion = tipoDeInversion;
     }
 
+    public double calcularMontoADevolver() {
+        throw new RuntimeException("Esta inversión no es precancelable");
+    }
+
     public abstract double sumarGanancia();
 
     public double getGananciasGeneradas() {

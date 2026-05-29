@@ -240,7 +240,8 @@ public class Billetera implements IBilletera {
 			double monto = inversion.getMonto();
 			double ganancia = (inversion.sumarGanancia());
 			Cuenta cuenta = devolverCuentaConCVU(cvu);
-			cuenta.depositar(monto+ganancia);
+			double montoADevolver = inversion.calcularMontoADevolver();
+    		cuenta.depositar(montoADevolver);
 			actividades.remove(idInversion);
 			Usuario usuario = devolverUsuarioConDNI(dni);
 			usuario.restarInvertido(monto);

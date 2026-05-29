@@ -15,7 +15,11 @@ public class RentaFija extends Inversion {
         this.preCancelable = true;
     }
     
-
+    @Override
+    public double calcularMontoADevolver() {
+        double ganancia = sumarGanancia();
+        return monto + (ganancia / 2);
+    }
 
     @Override
     public double sumarGanancia() {
